@@ -9,7 +9,7 @@ The venv currently contains the following modules (please update this list upon 
 + robotpy
 + pyfrc
 + cscore
-+ rev (**!!!** NOT installed on RoboRio, threw error!)
++ rev (**!!! downloaded in venv, but NOT installed on RoboRio, threw error !!!**)
 
 venv py version is 3.10.9, **DO NOT FORGET TO UPDATE pyvenv.cfg WITH THE CORRECT PATH TO YOUR PYTHON INSTALL**
 To run the venv, install the powershell plugin in vscode and run Scripts/Activate.ps1 in the roborioCode dir
@@ -22,6 +22,6 @@ Links:
 + [WPILib 2023 Overview](https://docs.wpilib.org/en/stable/docs/yearly-overview/index.html)
 
 **!!! Please use proper naming conventions in your code !!!**
-+ ALL CAPS for constants
-+ camelCase for variables and functions
++ ALL_CAPS for constants
++ camelCase for variables, functions, and file names
 + PascalCase for classes

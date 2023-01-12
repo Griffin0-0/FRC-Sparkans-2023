@@ -3,7 +3,7 @@ Code for the sparkans roborio
 
 ## Virtual Environment:
 
-The venv currently contains the following modules:
+The venv currently contains the following modules (please update this list upon adding more):
 + wpilib
 + robotpy
 + pyfrc

@@ -1,6 +1,6 @@
 # RoboRio code
-Code for the sparkans roborio
-<br/> feel free to update this doc throughout the season
+Code for the sparkans roborio.
+<br/> Feel free to update this doc throughout the season.
 
 ## Virtual Environment:
 

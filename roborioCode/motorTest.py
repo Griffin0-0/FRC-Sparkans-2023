@@ -4,8 +4,10 @@
 from rev import CANSparkMax
 import wpilib
 
+MOTOR_TYPE = CANSparkMax.MotorType.kBrushed
+
 class MyRobot(wpilib.TimedRobot):
     def robotInit(self):
-        self.motor = CANSparkMax(1, CANSparkMax.MotorType.kBrushless)
+        self.motor = CANSparkMax(1, MOTOR_TYPE)
     def teleopPeriodic(self):
         self.motor.set(0.5)

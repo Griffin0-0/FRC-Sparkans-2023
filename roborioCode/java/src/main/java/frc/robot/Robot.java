@@ -22,10 +22,10 @@ public class Robot extends TimedRobot {
   private static final int rightDeviceID2 = 3;
   private static final int rightDeviceID = 4;
   
-  private CANSparkMax m_leftMotor2;
-  private CANSparkMax m_rightMotor2;
-  private CANSparkMax m_leftMotor;
-  private CANSparkMax m_rightMotor;
+  private CANSparkMax m_leftMotor_topSet;
+  private CANSparkMax m_rightMotor_topSet;
+  private CANSparkMax m_leftMotor_bottomSet;
+  private CANSparkMax m_rightMotor_bottomSet;
 
   @Override
   public void robotInit() {
@@ -42,31 +42,24 @@ public class Robot extends TimedRobot {
    * The example below initializes four brushless motors with CAN IDs 1 and 2. Change
    * these parameters to match your setup
    */
-    m_leftMotor = new CANSparkMax(leftDeviceID, MotorType.kBrushed);
-    m_rightMotor = new CANSparkMax(rightDeviceID, MotorType.kBrushed);
+    m_leftMotor_bottomSet = new CANSparkMax(leftDeviceID, MotorType.kBrushed);
+    m_rightMotor_bottomSet = new CANSparkMax(rightDeviceID, MotorType.kBrushed);
 
     /**
      * The RestoreFactoryDefaults method can be used to reset the configuration parameters
      * in the SPARK MAX to their factory default state. If no argument is passed, these
      * parameters will not persist between power cycles
      */
-    m_leftMotor.restoreFactoryDefaults();
-    m_rightMotor.restoreFactoryDefaults();
+    m_leftMotor_bottomSet.restoreFactoryDefaults();
+    m_rightMotor_bottomSet.restoreFactoryDefaults();
 
    // m_myRobot = new DifferentialDrive(m_leftMotor, m_rightMotor);
 
+    m_leftMotor_topSet = new CANSparkMax(leftDeviceID2, MotorType.kBrushed);
+    m_rightMotor_topSet = new CANSparkMax(rightDeviceID2, MotorType.kBrushed);
 
-
-    m_leftMotor2 = new CANSparkMax(leftDeviceID2, MotorType.kBrushed);
-    m_rightMotor2 = new CANSparkMax(rightDeviceID2, MotorType.kBrushed);
-
-    /**
-     * The RestoreFactoryDefaults method can be used to reset the configuration parameters
-     * in the SPARK MAX to their factory default state. If no argument is passed, these
-     * parameters will not persist between power cycles
-     */
-    m_leftMotor2.restoreFactoryDefaults();
-    m_rightMotor2.restoreFactoryDefaults();
+    m_leftMotor_topSet.restoreFactoryDefaults();
+    m_rightMotor_topSet.restoreFactoryDefaults();
 
    // m_myRobot2 = new DifferentialDrive(m_leftMotor2, m_rightMotor2);
 
@@ -75,10 +68,10 @@ public class Robot extends TimedRobot {
 
   
   public void betterTankDrive(double left, double right){
-    m_leftMotor.set(left);
-    m_leftMotor2.set(-left);
-    m_rightMotor.set(right);
-    m_rightMotor2.set(-right);
+    m_leftMotor_bottomSet.set(left);
+    m_leftMotor_topSet.set(-left);
+    m_rightMotor_bottomSet.set(right);
+    m_rightMotor_topSet.set(-right);
   }
 
 

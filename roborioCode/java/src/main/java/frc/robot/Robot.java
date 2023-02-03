@@ -9,7 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
-//import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -21,12 +21,14 @@ public class Robot extends TimedRobot {
   private static final int leftDeviceID2 = 2;
   private static final int rightDeviceID2 = 3;
   private static final int rightDeviceID = 4;
+
+
   
   private CANSparkMax m_leftMotor_topSet;
   private CANSparkMax m_rightMotor_topSet;
   private CANSparkMax m_leftMotor_bottomSet;
   private CANSparkMax m_rightMotor_bottomSet;
-
+  private DifferentialDrive m_myRobot;
   @Override
   public void robotInit() {
   /**
@@ -53,30 +55,27 @@ public class Robot extends TimedRobot {
     m_leftMotor_bottomSet.restoreFactoryDefaults();
     m_rightMotor_bottomSet.restoreFactoryDefaults();
 
-   // m_myRobot = new DifferentialDrive(m_leftMotor, m_rightMotor);
-
     m_leftMotor_topSet = new CANSparkMax(leftDeviceID2, MotorType.kBrushed);
     m_rightMotor_topSet = new CANSparkMax(rightDeviceID2, MotorType.kBrushed);
 
     m_leftMotor_topSet.restoreFactoryDefaults();
     m_rightMotor_topSet.restoreFactoryDefaults();
 
-   // m_myRobot2 = new DifferentialDrive(m_leftMotor2, m_rightMotor2);
+   m_myRobot = new DifferentialDrive(m_leftMotor_bottomSet, m_rightMotor_bottomSet);
 
     m_stick = new GenericHID(0);
   }
 
   
-  public void betterTankDrive(double left, double right){
-    m_leftMotor_bottomSet.set(left);
-    m_leftMotor_topSet.set(-left);
-    m_rightMotor_bottomSet.set(right);
-    m_rightMotor_topSet.set(-right);
+  public void setTopMotors(double l, double r){
+    m_leftMotor_topSet.set(l);
+    m_rightMotor_topSet.set(r);
   }
 
 
   @Override
   public void teleopPeriodic() {
-    betterTankDrive(m_stick.getRawAxis(0), m_stick.getRawAxis(4));
+    m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.75, -m_stick.getRawAxis(1)*0.75);
+    setTopMotors(m_leftMotor_bottomSet.get(), m_rightMotor_bottomSet.get());
   }
 }

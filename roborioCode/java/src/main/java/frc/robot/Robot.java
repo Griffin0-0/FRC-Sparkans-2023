@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -21,6 +24,8 @@ public class Robot extends TimedRobot {
   private static final int leftDeviceID2 = 2;
   private static final int rightDeviceID2 = 3;
   private static final int rightDeviceID = 4;
+  private static final int armDeviceID2 = 24;
+  private static final int armDeviceID = 21;
 
 
   
@@ -28,6 +33,11 @@ public class Robot extends TimedRobot {
   private CANSparkMax m_rightMotor_topSet;
   private CANSparkMax m_leftMotor_bottomSet;
   private CANSparkMax m_rightMotor_bottomSet;
+
+  private VictorSPX m_arm_bottomSet;
+  private VictorSPX m_arm_topSet;
+  private VictorSPXControlMode spxControlMode = VictorSPXControlMode.PercentOutput;
+
   private DifferentialDrive m_myRobot;
   @Override
   public void robotInit() {
@@ -61,7 +71,10 @@ public class Robot extends TimedRobot {
     m_leftMotor_topSet.restoreFactoryDefaults();
     m_rightMotor_topSet.restoreFactoryDefaults();
 
-   m_myRobot = new DifferentialDrive(m_leftMotor_bottomSet, m_rightMotor_bottomSet);
+    m_arm_bottomSet = new VictorSPX(armDeviceID);
+    m_arm_topSet = new VictorSPX(armDeviceID2);
+
+    m_myRobot = new DifferentialDrive(m_leftMotor_bottomSet, m_rightMotor_bottomSet);
 
     m_stick = new GenericHID(0);
   }
@@ -72,10 +85,16 @@ public class Robot extends TimedRobot {
     m_rightMotor_topSet.set(r);
   }
 
+  public void setArmMotors(double speed){
+    m_arm_bottomSet.set(spxControlMode, speed);
+    m_arm_topSet.set(spxControlMode, speed);
+  }
 
   @Override
   public void teleopPeriodic() {
-    m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.75, -m_stick.getRawAxis(1)*0.75);
+    m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.75, -m_stick.getRawAxis(1));
     setTopMotors(m_leftMotor_bottomSet.get(), m_rightMotor_bottomSet.get());
+    //m_arm_bottomSet.set(spxControlMode, m_stick.getRawAxis(0)*0.5);
+    //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);
   }
 }

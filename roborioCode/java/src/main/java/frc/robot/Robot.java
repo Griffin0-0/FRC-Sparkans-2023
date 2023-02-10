@@ -10,7 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-// import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Servo;
 
 // import com.ctre.phoenix.motorcontrol.ControlMode;
 // import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
   // private static final int armDeviceID2 = 24;
   // private static final int armDeviceID = 21;
 
+  public int armGrabAngle = 0;
 
   
   private CANSparkMax m_leftMotorFront;
@@ -41,7 +42,7 @@ public class Robot extends TimedRobot {
 
   private DifferentialDrive m_myRobot;
 
-  // private Servo servo_1;
+  private Servo servo_1;
 
   @Override
   public void robotInit() {
@@ -81,13 +82,13 @@ public class Robot extends TimedRobot {
     m_myRobot = new DifferentialDrive(m_leftMotorBack, m_rightMotorBack);
 
     m_stick = new GenericHID(0);
-    // servo_1 = new Servo(0);
+    servo_1 = new Servo(0);
   }
 
   
   public void setTopMotors(double l, double r){
     m_leftMotorFront.set(l);
-    m_rightMotorFront.set(-r);
+    m_rightMotorFront.set(r);
   }
 
   // public void setArmMotors(double speed){
@@ -97,12 +98,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.75, -m_stick.getRawAxis(1));
+    m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.9, -m_stick.getRawAxis(1));
     setTopMotors(m_leftMotorBack.get(), m_rightMotorBack.get());
     //m_arm_bottomSet.set(spxControlMode, m_stick.getRawAxis(0)*0.5);
     //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);
+    if (m_stick.getRawButton(6) && armGrabAngle <= 180){
+      armGrabAngle++;
+      System.out.println("up");
+    }
+    if (m_stick.getRawButton(5) && armGrabAngle >= -180){
+      armGrabAngle--;
+      System.out.println("down");
+    }
 
-    //servo_1.set(0.1);
-    // servo_1.setAngle(180);
+    servo_1.setAngle(armGrabAngle*2);
   }
 }

@@ -25,10 +25,10 @@ public class Robot extends TimedRobot {
   private static final int leftBack = 2;
   private static final int rightFront = 4; // just 3
   private static final int rightBack = 33;
-  private static final int victorDeviceID2 = 5;
-  private static final int victorDeviceID= 3;
-  private static final int victorDeviceID3= 24;
-  private static final int victorDeviceID4= 21;
+  private static final int victorDeviceID2 = 2;
+  private static final int victorDeviceID= 1;
+  private static final int victorDeviceID3= 3;
+  private static final int victorDeviceID4= 4;
 
   public int armGrabAngle = 0;
 

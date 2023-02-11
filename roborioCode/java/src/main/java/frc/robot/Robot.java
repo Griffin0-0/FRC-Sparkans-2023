@@ -32,6 +32,8 @@ public class Robot extends TimedRobot {
 
   public int armGrabAngle = 0;
 
+  private double armPower = 0.0;
+
   
   private CANSparkMax m_leftMotorFront;
   private CANSparkMax m_rightMotorFront;
@@ -107,17 +109,31 @@ public class Robot extends TimedRobot {
     m_vLeftMotorFront.set(spxControlMode, l);
   }
 
+  public void armTest(double power){
+    m_rightMotorBack.set(power);
+    m_leftMotorBack.set(power);
+  }
+
   @Override
   public void teleopPeriodic() {
-    m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.25, -m_stick.getRawAxis(1));
-    setTopVictors(m_vLeftMotorBack.get(), m_vRightMotorBack.get());
+    //m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.25, -m_stick.getRawAxis(1));
+    //setTopVictors(m_vLeftMotorBack.get(), m_vRightMotorBack.get());
     //m_arm_bottomSet.set(spxControlMode, m_stick.getRawAxis(0)*0.5);
     //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);
-    if (m_stick.getRawButton(6) && armGrabAngle <= 180){
+
+    if(m_stick.getRawButtonPressed(7) && armPower < 1){
+      armPower = armPower + 0.05;
+    }
+    if(m_stick.getRawButtonPressed(5) && armPower > 0){
+      armPower = armPower - 0.05;
+    }
+
+
+    if (m_stick.getRawButton(8) && armGrabAngle <= 180){
       armGrabAngle++;
       System.out.println("up");
     }
-    if (m_stick.getRawButton(5) && armGrabAngle >= -180){
+    if (m_stick.getRawButton(6) && armGrabAngle >= -180){
       armGrabAngle--;
       System.out.println("down");
     }

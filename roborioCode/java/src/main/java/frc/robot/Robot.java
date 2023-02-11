@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
   private DifferentialDrive m_myRobot;
 
   private Servo servo_1;
+  private Servo servo_2;
 
   @Override
   public void robotInit() {
@@ -96,6 +97,7 @@ public class Robot extends TimedRobot {
 
     m_stick = new GenericHID(0);
     servo_1 = new Servo(0);
+    servo_2 = new Servo(1);
   }
 
   
@@ -116,8 +118,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    //m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.25, -m_stick.getRawAxis(1));
-    //setTopVictors(m_vLeftMotorBack.get(), m_vRightMotorBack.get());
+    m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.25, -m_stick.getRawAxis(1));
+    setTopVictors(m_vLeftMotorBack.get(), m_vRightMotorBack.get());
     //m_arm_bottomSet.set(spxControlMode, m_stick.getRawAxis(0)*0.5);
     //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);
 
@@ -139,5 +141,6 @@ public class Robot extends TimedRobot {
     }
 
     servo_1.setAngle(armGrabAngle*2);
+    servo_2.setAngle(armGrabAngle*2);
   }
 }

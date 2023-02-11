@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Servo;
 
 // import com.ctre.phoenix.motorcontrol.ControlMode;
-// import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
-// import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import com.ctre.phoenix.motorcontrol.can.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -25,8 +25,10 @@ public class Robot extends TimedRobot {
   private static final int leftBack = 2;
   private static final int rightFront = 4; // just 3
   private static final int rightBack = 33;
-  // private static final int armDeviceID2 = 24;
-  // private static final int armDeviceID = 21;
+  private static final int victorDeviceID2 = 24;
+  private static final int victorDeviceID= 21;
+  private static final int victorDeviceID3= 3;
+  private static final int victorDeviceID4= 5;
 
   public int armGrabAngle = 0;
 
@@ -36,9 +38,11 @@ public class Robot extends TimedRobot {
   private CANSparkMax m_leftMotorBack;
   private CANSparkMax m_rightMotorBack;
 
-  // private VictorSPX m_arm_bottomSet;
-  // private VictorSPX m_arm_topSet;
-  // private VictorSPXControlMode spxControlMode = VictorSPXControlMode.PercentOutput;
+  private WPI_VictorSPX m_vLeftMotorFront;
+  private WPI_VictorSPX m_vRightMotorFront;
+  private WPI_VictorSPX m_vLeftMotorBack;
+  private WPI_VictorSPX m_vRightMotorBack;
+  private VictorSPXControlMode spxControlMode = VictorSPXControlMode.PercentOutput;
 
   private DifferentialDrive m_myRobot;
 
@@ -79,7 +83,14 @@ public class Robot extends TimedRobot {
     // m_arm_bottomSet = new VictorSPX(armDeviceID);
     // m_arm_topSet = new VictorSPX(armDeviceID2);
 
-    m_myRobot = new DifferentialDrive(m_leftMotorBack, m_rightMotorBack);
+    m_vLeftMotorBack = new WPI_VictorSPX(victorDeviceID);
+    m_vLeftMotorFront = new WPI_VictorSPX(victorDeviceID2);
+
+    m_vRightMotorBack = new WPI_VictorSPX(victorDeviceID3);
+    m_vRightMotorFront = new WPI_VictorSPX(victorDeviceID4);
+
+    // m_myRobot = new DifferentialDrive(m_leftMotorBack, m_rightMotorBack);
+    m_myRobot = new DifferentialDrive(m_vLeftMotorBack, m_vRightMotorBack);
 
     m_stick = new GenericHID(0);
     servo_1 = new Servo(0);
@@ -91,15 +102,15 @@ public class Robot extends TimedRobot {
     m_rightMotorFront.set(r);
   }
 
-  // public void setArmMotors(double speed){
-  //   m_arm_bottomSet.set(spxControlMode, speed);
-  //   m_arm_topSet.set(spxControlMode, speed);
-  // }
+  public void setTopVictors(double l, double r){
+    m_vRightMotorFront.set(spxControlMode, r);
+    m_vLeftMotorFront.set(spxControlMode, l);
+  }
 
   @Override
   public void teleopPeriodic() {
     m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.9, -m_stick.getRawAxis(1));
-    setTopMotors(m_leftMotorBack.get(), m_rightMotorBack.get());
+    setTopVictors(m_vLeftMotorBack.get(), m_vRightMotorBack.get());
     //m_arm_bottomSet.set(spxControlMode, m_stick.getRawAxis(0)*0.5);
     //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);
     if (m_stick.getRawButton(6) && armGrabAngle <= 180){

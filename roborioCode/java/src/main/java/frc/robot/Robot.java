@@ -25,10 +25,10 @@ public class Robot extends TimedRobot {
   private static final int leftBack = 2;
   private static final int rightFront = 4; // just 3
   private static final int rightBack = 33;
-  private static final int victorDeviceID2 = 24;
-  private static final int victorDeviceID= 21;
-  private static final int victorDeviceID3= 3;
-  private static final int victorDeviceID4= 5;
+  private static final int victorDeviceID2 = 5;
+  private static final int victorDeviceID= 3;
+  private static final int victorDeviceID3= 24;
+  private static final int victorDeviceID4= 21;
 
   public int armGrabAngle = 0;
 
@@ -109,7 +109,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.9, -m_stick.getRawAxis(1));
+    m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.25, -m_stick.getRawAxis(1));
     setTopVictors(m_vLeftMotorBack.get(), m_vRightMotorBack.get());
     //m_arm_bottomSet.set(spxControlMode, m_stick.getRawAxis(0)*0.5);
     //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);

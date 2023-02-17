@@ -26,14 +26,11 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class Robot extends TimedRobot {
 
   private GenericHID m_stick;
-  //private static final int leftFront = 1; 
-  //private static final int leftBack = 2;
-  //private static final int rightFront = 4; // just 3
-  //private static final int rightBack = 33;
+
+  private static final int victorDeviceID = 1;
   private static final int victorDeviceID2 = 2;
-  private static final int victorDeviceID= 1;
-  private static final int victorDeviceID3= 3;
-  private static final int victorDeviceID4= 4;
+  private static final int victorDeviceID3 = 3;
+  private static final int victorDeviceID4 = 4;
 
   public int armGrabAngle = 0;
   public int armGrabAngle2 = 0;
@@ -107,8 +104,8 @@ public class Robot extends TimedRobot {
     // m_arm_bottomSet = new VictorSPX(armDeviceID);
     // m_arm_topSet = new VictorSPX(armDeviceID2);
 
-    m_vLeftMotorBack = new WPI_VictorSPX(victorDeviceID);
-    m_vLeftMotorFront = new WPI_VictorSPX(victorDeviceID2);
+    m_vLeftMotorFront = new WPI_VictorSPX(victorDeviceID);
+    m_vLeftMotorBack = new WPI_VictorSPX(victorDeviceID2);
 
     m_vRightMotorBack = new WPI_VictorSPX(victorDeviceID3);
     m_vRightMotorFront = new WPI_VictorSPX(victorDeviceID4);
@@ -153,7 +150,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_myRobot.arcadeDrive(-m_stick.getRawAxis(2), -m_stick.getRawAxis(1)*0.5);
+    m_myRobot.arcadeDrive(m_stick.getRawAxis(2)*-0.5, m_stick.getRawAxis(1)*-0.5);
     setTopVictors(m_vLeftMotorBack.get(), m_vRightMotorBack.get());
     //m_arm_bottomSet.set(spxControlMode, m_stick.getRawAxis(0)*0.5);
     //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);
@@ -164,16 +161,19 @@ public class Robot extends TimedRobot {
     }
     if(m_stick.getRawButtonPressed(5) && armPower > 0){
       armPower = armPower - 0.05;
-    }
+    } 
 
 
-    if (m_stick.getRawButton(8) && armGrabAngle <= 90){
+    if (m_stick.getRawButton(8) && armGrabAngle <= 60){
       armGrabAngle++;
       System.out.println("up");
     }
-    if (m_stick.getRawButton(6) && armGrabAngle >= 0  ){
+    if (m_stick.getRawButton(6) && armGrabAngle >= 0){
       armGrabAngle--;
       System.out.println("down");
     }
+
+    servo_1.setAngle((armGrabAngle*2)+19);
+    servo_2.setAngle(armGrabAngle*2);
   }
 }

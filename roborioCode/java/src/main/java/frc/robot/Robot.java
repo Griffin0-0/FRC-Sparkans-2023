@@ -12,6 +12,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Servo;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
+
 // import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -21,18 +26,25 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class Robot extends TimedRobot {
 
   private GenericHID m_stick;
-  private static final int leftFront = 1; 
-  private static final int leftBack = 2;
-  private static final int rightFront = 4; // just 3
-  private static final int rightBack = 33;
+  //private static final int leftFront = 1; 
+  //private static final int leftBack = 2;
+  //private static final int rightFront = 4; // just 3
+  //private static final int rightBack = 33;
   private static final int victorDeviceID2 = 2;
   private static final int victorDeviceID= 1;
   private static final int victorDeviceID3= 3;
   private static final int victorDeviceID4= 4;
 
   public int armGrabAngle = 0;
+  public int armGrabAngle2 = 0;
 
   private double armPower = 0.0;
+
+  MjpegServer camera1;
+  MjpegServer camera2;
+
+  PixelFormat pixelFormat = PixelFormat.kGray;
+
 
   
   private CANSparkMax m_leftMotorFront;
@@ -53,6 +65,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+
+   // get a CameraServer instance from rPi
+
+    camera1 = CameraServer.addServer("cam0", 1181);
+    camera2 = CameraServer.addServer("cam1", 1182);
+
+    
+
+
   /**
    * SPARK MAX controllers are intialized over CAN by constructing a CANSparkMax object
    * 
@@ -66,22 +87,22 @@ public class Robot extends TimedRobot {
    * The example below initializes four brushless motors with CAN IDs 1 and 2. Change
    * these parameters to match your setup
    */
-    m_leftMotorBack = new CANSparkMax(leftBack, MotorType.kBrushed);
-    m_rightMotorBack = new CANSparkMax(rightBack, MotorType.kBrushed);
+    //m_leftMotorBack = new CANSparkMax(leftBack, MotorType.kBrushed);
+    //m_rightMotorBack = new CANSparkMax(rightBack, MotorType.kBrushed);
 
     /**
      * The RestoreFactoryDefaults method can be used to reset the configuration parameters
      * in the SPARK MAX to their factory default state. If no argument is passed, these
      * parameters will not persist between power cycles
      */
-    m_leftMotorBack.restoreFactoryDefaults();
-    m_rightMotorBack.restoreFactoryDefaults();
+    //m_leftMotorBack.restoreFactoryDefaults();
+    //m_rightMotorBack.restoreFactoryDefaults();
 
-    m_leftMotorFront = new CANSparkMax(leftFront, MotorType.kBrushed);
-    m_rightMotorFront = new CANSparkMax(rightFront, MotorType.kBrushed);
+  //  m_leftMotorFront = new CANSparkMax(leftFront, MotorType.kBrushed);
+//    m_rightMotorFront = new CANSparkMax(rightFront, MotorType.kBrushed);
 
-    m_leftMotorFront.restoreFactoryDefaults();
-    m_rightMotorFront.restoreFactoryDefaults();
+    //m_leftMotorFront.restoreFactoryDefaults();
+    //m_rightMotorFront.restoreFactoryDefaults();
 
     // m_arm_bottomSet = new VictorSPX(armDeviceID);
     // m_arm_topSet = new VictorSPX(armDeviceID2);
@@ -96,32 +117,47 @@ public class Robot extends TimedRobot {
     m_myRobot = new DifferentialDrive(m_vLeftMotorBack, m_vRightMotorBack);
 
     m_stick = new GenericHID(0);
+
     servo_1 = new Servo(0);
     servo_2 = new Servo(1);
+    Thread servo1Set = new Thread(() -> {
+      while(true){
+        servo_1.setAngle(armGrabAngle*2-90);
+      }
+    });
+    Thread servo2Set = new Thread(() -> {
+      while(true){
+        servo_2.setAngle(armGrabAngle2*2-45);
+      }
+    });
+
+    servo1Set.start();
+    servo2Set.start();
   }
 
   
-  public void setTopMotors(double l, double r){
+ /* public void setTopMotors(double l, double r){
     m_leftMotorFront.set(l);
     m_rightMotorFront.set(r);
-  }
+  }*/
 
   public void setTopVictors(double l, double r){
     m_vRightMotorFront.set(spxControlMode, r);
     m_vLeftMotorFront.set(spxControlMode, l);
   }
 
-  public void armTest(double power){
-    m_rightMotorBack.set(power);
-    m_leftMotorBack.set(power);
-  }
+ /*public void armTest(double power){
+    m_rightMotorBack.set(-power);
+    m_leftMotorBack.set(-power);
+  }*/
 
   @Override
   public void teleopPeriodic() {
-    m_myRobot.arcadeDrive(-m_stick.getRawAxis(4)*0.25, -m_stick.getRawAxis(1));
+    m_myRobot.arcadeDrive(-m_stick.getRawAxis(2), -m_stick.getRawAxis(1)*0.5);
     setTopVictors(m_vLeftMotorBack.get(), m_vRightMotorBack.get());
     //m_arm_bottomSet.set(spxControlMode, m_stick.getRawAxis(0)*0.5);
     //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);
+    //armTest(armPower);  
 
     if(m_stick.getRawButtonPressed(7) && armPower < 1){
       armPower = armPower + 0.05;
@@ -131,16 +167,13 @@ public class Robot extends TimedRobot {
     }
 
 
-    if (m_stick.getRawButton(8) && armGrabAngle <= 180){
+    if (m_stick.getRawButton(8) && armGrabAngle <= 90){
       armGrabAngle++;
       System.out.println("up");
     }
-    if (m_stick.getRawButton(6) && armGrabAngle >= -180){
+    if (m_stick.getRawButton(6) && armGrabAngle >= 0  ){
       armGrabAngle--;
       System.out.println("down");
     }
-
-    servo_1.setAngle(armGrabAngle*2);
-    servo_2.setAngle(armGrabAngle*2);
   }
 }

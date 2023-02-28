@@ -119,12 +119,12 @@ public class Robot extends TimedRobot {
     servo_2 = new Servo(1);
     Thread servo1Set = new Thread(() -> {
       while(true){
-        servo_1.setAngle(armGrabAngle*2-90);
+        servo_1.setAngle((armGrabAngle*2)+49);
       }
     });
     Thread servo2Set = new Thread(() -> {
       while(true){
-        servo_2.setAngle(armGrabAngle2*2-45);
+        servo_2.setAngle((armGrabAngle*2)+26);
       }
     });
 
@@ -164,16 +164,16 @@ public class Robot extends TimedRobot {
     } 
 
 
-    if (m_stick.getRawButton(8) && armGrabAngle <= 60){
+    if (m_stick.getRawButton(6) && armGrabAngle <= 60){
       armGrabAngle++;
       System.out.println("up");
     }
-    if (m_stick.getRawButton(6) && armGrabAngle >= 0){
+    if (m_stick.getRawButton(8) && armGrabAngle >= 0){
       armGrabAngle--;
       System.out.println("down");
     }
 
-    servo_1.setAngle((armGrabAngle*2)+19);
-    servo_2.setAngle(armGrabAngle*2);
+    // servo_1.setAngle((armGrabAngle*2)+49);
+    // servo_2.setAngle((armGrabAngle*2)+26);   not needed when threaded
   }
 }

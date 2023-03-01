@@ -131,12 +131,12 @@ public class Robot extends TimedRobot {
 
     Thread servo1Set = new Thread(() -> {
       while(true){
-        servo_1.setAngle((armGrabAngle*2)+49);
+        servo_1.setAngle((armGrabAngle)+49);
       }
     });
     Thread servo2Set = new Thread(() -> {
       while(true){
-        servo_2.setAngle((armGrabAngle*2)+26);
+        servo_2.setAngle((armGrabAngle)+26);
       }
     });
 

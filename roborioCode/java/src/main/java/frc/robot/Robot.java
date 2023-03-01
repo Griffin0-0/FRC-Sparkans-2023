@@ -128,20 +128,6 @@ public class Robot extends TimedRobot {
 
     servo_1 = new Servo(0);
     servo_2 = new Servo(1);
-
-    Thread servo1Set = new Thread(() -> {
-      while(true){
-        servo_1.setAngle((armGrabAngle)+49);
-      }
-    });
-    Thread servo2Set = new Thread(() -> {
-      while(true){
-        servo_2.setAngle((armGrabAngle)+26);
-      }
-    });
-
-    servo1Set.start();
-    servo2Set.start();
   }
 
   
@@ -159,6 +145,25 @@ public class Robot extends TimedRobot {
     m_rightMotorBack.set(-power);
     m_leftMotorBack.set(-power);
   }*/
+
+  @Override
+  public void teleopInit() {
+    m_armMotor.restoreFactoryDefaults();
+    m_gripperMotor.restoreFactoryDefaults();
+    Thread servo1Set = new Thread(() -> {
+      while(true){
+        servo_1.setAngle((armGrabAngle)+49);
+      }
+    });
+    Thread servo2Set = new Thread(() -> {
+      while(true){
+        servo_2.setAngle((armGrabAngle)+26);
+      }
+    });
+
+    servo1Set.start();
+    servo2Set.start();
+  }
 
   @Override
   public void teleopPeriodic() {

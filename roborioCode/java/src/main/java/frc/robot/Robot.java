@@ -128,19 +128,20 @@ public class Robot extends TimedRobot {
 
     servo_1 = new Servo(0);
     servo_2 = new Servo(1);
-    // Thread servo1Set = new Thread(() -> {
-    //   while(true){
-    //     servo_1.setAngle(armGrabAngle*2-90);
-    //   }
-    // });
-    // Thread servo2Set = new Thread(() -> {
-    //   while(true){
-    //     servo_2.setAngle(armGrabAngle2*2-45);
-    //   }
-    // });
 
-    // servo1Set.start();
-    // servo2Set.start();
+    Thread servo1Set = new Thread(() -> {
+      while(true){
+        servo_1.setAngle((armGrabAngle*2)+49);
+      }
+    });
+    Thread servo2Set = new Thread(() -> {
+      while(true){
+        servo_2.setAngle((armGrabAngle*2)+26);
+      }
+    });
+
+    servo1Set.start();
+    servo2Set.start();
   }
 
   
@@ -212,9 +213,7 @@ public class Robot extends TimedRobot {
 
     m_gripperMotor.set(grabberSpin ? 0.3d * armDir : 0d);
     
-    // OLD: +19, 0
-    // NEW: ??, -34?
-    servo_1.setAngle(armGrabAngle+19);
-    servo_2.setAngle(armGrabAngle);
+    // servo_1.setAngle((armGrabAngle*2)+49);
+    // servo_2.setAngle((armGrabAngle*2)+26);   not needed when threaded
   }
 }

@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -32,7 +33,7 @@ public class Robot extends TimedRobot {
   private static final int victorDeviceID3 = 3;
   private static final int victorDeviceID4 = 4;
 
-  public int armGrabAngle = 0;
+  public int armGrabAngle = 120;
   public int armGrabAngle2 = 0;
 
   private double armPower = 0.0;
@@ -42,18 +43,24 @@ public class Robot extends TimedRobot {
 
   PixelFormat pixelFormat = PixelFormat.kGray;
 
+  Boolean armMove = true;
 
+  Boolean grabberSpin = false;
+
+  Boolean armZero = true;
+
+  Double armDir = 1d;
   
-  private CANSparkMax m_leftMotorFront;
-  private CANSparkMax m_rightMotorFront;
-  private CANSparkMax m_leftMotorBack;
-  private CANSparkMax m_rightMotorBack;
+  private CANSparkMax m_armMotor;
+  private CANSparkMax m_gripperMotor;
 
   private WPI_VictorSPX m_vLeftMotorFront;
   private WPI_VictorSPX m_vRightMotorFront;
   private WPI_VictorSPX m_vLeftMotorBack;
   private WPI_VictorSPX m_vRightMotorBack;
   private VictorSPXControlMode spxControlMode = VictorSPXControlMode.PercentOutput;
+
+  DigitalInput input = new DigitalInput(0);
 
   private DifferentialDrive m_myRobot;
 
@@ -104,6 +111,10 @@ public class Robot extends TimedRobot {
     // m_arm_bottomSet = new VictorSPX(armDeviceID);
     // m_arm_topSet = new VictorSPX(armDeviceID2);
 
+    m_armMotor = new CANSparkMax(33, MotorType.kBrushed);
+    m_gripperMotor = new CANSparkMax(11, MotorType.kBrushless);
+
+
     m_vLeftMotorFront = new WPI_VictorSPX(victorDeviceID);
     m_vLeftMotorBack = new WPI_VictorSPX(victorDeviceID2);
 
@@ -117,19 +128,19 @@ public class Robot extends TimedRobot {
 
     servo_1 = new Servo(0);
     servo_2 = new Servo(1);
-    Thread servo1Set = new Thread(() -> {
-      while(true){
-        servo_1.setAngle(armGrabAngle*2-90);
-      }
-    });
-    Thread servo2Set = new Thread(() -> {
-      while(true){
-        servo_2.setAngle(armGrabAngle2*2-45);
-      }
-    });
+    // Thread servo1Set = new Thread(() -> {
+    //   while(true){
+    //     servo_1.setAngle(armGrabAngle*2-90);
+    //   }
+    // });
+    // Thread servo2Set = new Thread(() -> {
+    //   while(true){
+    //     servo_2.setAngle(armGrabAngle2*2-45);
+    //   }
+    // });
 
-    servo1Set.start();
-    servo2Set.start();
+    // servo1Set.start();
+    // servo2Set.start();
   }
 
   
@@ -156,24 +167,54 @@ public class Robot extends TimedRobot {
     //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);
     //armTest(armPower);  
 
-    if(m_stick.getRawButtonPressed(7) && armPower < 1){
-      armPower = armPower + 0.05;
+    if(! input.get()){
+      armMove = false;
     }
-    if(m_stick.getRawButtonPressed(5) && armPower > 0){
-      armPower = armPower - 0.05;
-    } 
+
+    if(m_stick.getRawButton(7) && armMove == true){
+      m_armMotor.set(0.05);
+    }
+    else if(m_stick.getRawButton(5)){
+      m_armMotor.set(0.50);
+    }
+    else if(! armZero){
+      m_armMotor.set(0.15);
+    }
+    else{
+      m_armMotor.set(0);
+    }
+
+    if(m_stick.getRawButton(1)){
+      armMove = true;
+    }
+
+    if(m_stick.getRawButtonPressed(2)){
+      grabberSpin = ! grabberSpin;
+    }
+
+    if(m_stick.getRawButtonPressed(3)){
+      armDir = -armDir;
+    }
+
+    if(m_stick.getRawButtonPressed(4)){
+      armZero = ! armZero;
+    }
 
 
-    if (m_stick.getRawButton(8) && armGrabAngle <= 60){
+    if (m_stick.getRawButton(6) && armGrabAngle <= 120){
       armGrabAngle++;
       System.out.println("up");
     }
-    if (m_stick.getRawButton(6) && armGrabAngle >= 0){
+    if (m_stick.getRawButton(8) && armGrabAngle >= 0){
       armGrabAngle--;
       System.out.println("down");
     }
 
-    servo_1.setAngle((armGrabAngle*2)+19);
-    servo_2.setAngle(armGrabAngle*2);
+    m_gripperMotor.set(grabberSpin ? 0.3d * armDir : 0d);
+    
+    // OLD: +19, 0
+    // NEW: ??, -34?
+    servo_1.setAngle(armGrabAngle+19);
+    servo_2.setAngle(armGrabAngle);
   }
 }

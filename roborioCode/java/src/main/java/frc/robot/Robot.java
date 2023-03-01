@@ -167,7 +167,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_myRobot.arcadeDrive(m_stick.getRawAxis(2)*-0.5, m_stick.getRawAxis(1)*-0.5);
+    m_myRobot.arcadeDrive(m_stick.getRawAxis(2), m_stick.getRawAxis(1));
     setTopVictors(m_vLeftMotorBack.get(), m_vRightMotorBack.get());
     //m_arm_bottomSet.set(spxControlMode, m_stick.getRawAxis(0)*0.5);
     //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);
@@ -178,12 +178,12 @@ public class Robot extends TimedRobot {
     }
 
     if(m_stick.getRawButton(7) && armMove == true){
-      m_armMotor.set(0.05);
+      m_armMotor.set(0);
     }
     else if(m_stick.getRawButton(5) && armMove == true){
       m_armMotor.set(0.50);
     }
-    else if(! armZero){
+    else if(! armZero && armMove == true){
       m_armMotor.set(0.15);
     }
     else{

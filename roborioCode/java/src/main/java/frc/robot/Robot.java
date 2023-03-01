@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
   private static final int victorDeviceID3 = 3;
   private static final int victorDeviceID4 = 4;
 
-  public int armGrabAngle = 120;
+  public int armGrabAngle = 110;
   public int armGrabAngle2 = 0;
 
   private double armPower = 0.0;
@@ -167,7 +167,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_myRobot.arcadeDrive(m_stick.getRawAxis(2), m_stick.getRawAxis(1));
+    m_myRobot.arcadeDrive(-m_stick.getRawAxis(2)*0.5, -m_stick.getRawAxis(1)*0.75);
     setTopVictors(m_vLeftMotorBack.get(), m_vRightMotorBack.get());
     //m_arm_bottomSet.set(spxControlMode, m_stick.getRawAxis(0)*0.5);
     //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);
@@ -207,7 +207,7 @@ public class Robot extends TimedRobot {
     }
 
 
-    if (m_stick.getRawButton(6) && armGrabAngle <= 120){
+    if (m_stick.getRawButton(6) && armGrabAngle <= 110){
       armGrabAngle++;
       System.out.println("up");
     }

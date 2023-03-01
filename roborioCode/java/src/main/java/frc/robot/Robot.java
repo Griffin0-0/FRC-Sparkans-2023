@@ -174,7 +174,7 @@ public class Robot extends TimedRobot {
     if(m_stick.getRawButton(7) && armMove == true){
       m_armMotor.set(0.05);
     }
-    else if(m_stick.getRawButton(5)){
+    else if(m_stick.getRawButton(5) && armMove == true){
       m_armMotor.set(0.50);
     }
     else if(! armZero){

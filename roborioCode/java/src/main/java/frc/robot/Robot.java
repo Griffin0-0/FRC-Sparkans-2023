@@ -186,7 +186,12 @@ public class Robot extends TimedRobot {
       m_myRobot.tankDrive(0.50, -0.70);
       setTopVictors(0.50, -0.70);
     }
+    while (timer.get() <= 4){
+      m_myRobot.tankDrive(-0.10, 0.30);
+      setTopVictors(-0.10, 0.30);
+    }
     setTopVictors(0, 0);
+    m_myRobot.tankDrive(0, 0);
   }
   // @Override
   // public void autonomousInit() {
@@ -219,7 +224,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_myRobot.arcadeDrive(-m_stick.getRawAxis(2)*0.5, -m_stick.getRawAxis(1)*0.75);
+    m_myRobot.arcadeDrive(-m_stick.getRawAxis(2)*0.6, -m_stick.getRawAxis(1)*0.90);
     setTopVictors(m_vLeftMotorBack.get(), m_vRightMotorBack.get());
     //m_arm_bottomSet.set(spxControlMode, m_stick.getRawAxis(0)*0.5);
     //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);

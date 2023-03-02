@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Servo;
 
@@ -51,7 +52,7 @@ public class Robot extends TimedRobot {
 
   Boolean armZero = true;
 
-  Double armDir = -1d;
+  Double armDir = 1d;
   
   private CANSparkMax m_armMotor;
   private CANSparkMax m_gripperMotor;
@@ -133,12 +134,12 @@ public class Robot extends TimedRobot {
 
     Thread servo1Set = new Thread(() -> {
       while(true){
-        servo_1.setAngle((armGrabAngle)+53);
+        servo_1.setAngle((armGrabAngle)+18);
       }
     });
     Thread servo2Set = new Thread(() -> {
       while(true){
-        servo_2.setAngle((armGrabAngle));
+        servo_2.setAngle((armGrabAngle)+35);
       }
     });
 
@@ -167,8 +168,24 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    AutoCommand auto = new AutoCommand();
-    auto.schedule();
+    //AutoCommand auto = new AutoCommand();
+    //auto.schedule();
+    m_vLeftMotorFront = new WPI_VictorSPX(victorDeviceID);
+    m_vLeftMotorBack = new WPI_VictorSPX(victorDeviceID2);
+
+    m_vRightMotorBack = new WPI_VictorSPX(victorDeviceID3);
+    m_vRightMotorFront = new WPI_VictorSPX(victorDeviceID4);
+
+    m_myRobot = new DifferentialDrive(m_vLeftMotorBack, m_vRightMotorBack);
+    Timer timer = new Timer();
+    timer.reset();
+    timer.start();
+
+    while (timer.get() <= 3.5){
+      m_myRobot.tankDrive(0.5, -0.70);
+      setTopVictors(0.5, -0.70);
+    }
+    setTopVictors(0, 0);
   }
 
   @Override
@@ -194,7 +211,7 @@ public class Robot extends TimedRobot {
     }
     else if(m_stick.getRawButton(5) && armMove == true){
       m_armMotor.set(0.50);
-    }
+    } 
     else if(! armZero && armMove == true){
       m_armMotor.set(0.15);
     }
@@ -219,11 +236,11 @@ public class Robot extends TimedRobot {
     }
 
 
-    if (m_stick.getRawButton(6) && armGrabAngle <= 110){
+    if (m_stick.getRawButton(8) && armGrabAngle <= 120){
       armGrabAngle++;
       System.out.println("up");
     }
-    if (m_stick.getRawButton(8) && armGrabAngle >= 2){
+    if (m_stick.getRawButton(6) && armGrabAngle >= 0){
       armGrabAngle--;
       System.out.println("down");
     }

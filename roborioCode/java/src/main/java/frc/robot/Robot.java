@@ -182,7 +182,7 @@ public class Robot extends TimedRobot {
     timer.start(); 
 
     m_gripperMotor.set(0.3);
-    while (timer.get() <= 2){
+    while (timer.get() <= 3){
       m_myRobot.tankDrive(0.50, -0.70);
       setTopVictors(0.50, -0.70);
     }

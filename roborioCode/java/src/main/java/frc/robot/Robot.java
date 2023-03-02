@@ -179,14 +179,37 @@ public class Robot extends TimedRobot {
     m_myRobot = new DifferentialDrive(m_vLeftMotorBack, m_vRightMotorBack);
     Timer timer = new Timer();
     timer.reset();
-    timer.start();
+    timer.start(); 
 
-    while (timer.get() <= 3){
-      m_myRobot.tankDrive(0.65, -0.85);
-      setTopVictors(0.65, -0.85);
+    m_gripperMotor.set(0.3);
+    while (timer.get() <= 2){
+      m_myRobot.tankDrive(0.50, -0.70);
+      setTopVictors(0.50, -0.70);
     }
     setTopVictors(0, 0);
   }
+  // @Override
+  // public void autonomousInit() {
+  //   //AutoCommand auto = new AutoCommand();
+  //   //auto.schedule();
+  //   m_vLeftMotorFront = new WPI_VictorSPX(victorDeviceID);
+  //   m_vLeftMotorBack = new WPI_VictorSPX(victorDeviceID2);
+
+  //   m_vRightMotorBack = new WPI_VictorSPX(victorDeviceID3);
+  //   m_vRightMotorFront = new WPI_VictorSPX(victorDeviceID4);
+
+  //   m_myRobot = new DifferentialDrive(m_vLeftMotorBack, m_vRightMotorBack);
+  //   Timer timer = new Timer();
+  //   timer.reset();
+  //   timer.start();
+
+  //   m_gripperMotor.set(0.3);
+  //   while (timer.get() <= 1){
+  //     m_myRobot.tankDrive(0.40, -0.60);
+  //     setTopVictors(0.40, -0.60);
+  //   }
+  //   setTopVictors(0, 0);
+  // }
 
   @Override
   public void teleopInit() {

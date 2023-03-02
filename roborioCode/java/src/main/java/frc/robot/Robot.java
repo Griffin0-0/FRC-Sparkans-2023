@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
   // private static final int victorDeviceID3 = 3;
   // private static final int victorDeviceID4 = 4;
 
-  public int armGrabAngle = 0;
+  public int armGrabAngle = 110;
 
   // private double armPower = 0.0;
 
@@ -131,7 +131,7 @@ public class Robot extends TimedRobot {
     // } 
 
 
-    if (m_stick.getRawButton(6) && armGrabAngle <= 60){
+    if (m_stick.getRawButton(6) && armGrabAngle <= 110){
       armGrabAngle++;
       System.out.println("up");
     }
@@ -140,7 +140,7 @@ public class Robot extends TimedRobot {
       System.out.println("down");
     }
 
-    servo_1.setAngle((armGrabAngle*2)+49);
-    servo_2.setAngle((armGrabAngle*2)+26);
+    servo_1.setAngle((armGrabAngle));
+    servo_2.setAngle((armGrabAngle));
   }
 }

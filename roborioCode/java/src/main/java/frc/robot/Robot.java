@@ -26,6 +26,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.auto.AutoCommand;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public class Robot extends TimedRobot {
 
   private GenericHID m_stick;
@@ -146,6 +148,8 @@ public class Robot extends TimedRobot {
     servo2Set.start();
 
     m_armMotor.set(-0.05);
+    m_myRobot.setSafetyEnabled(false);
+
   }
 
   
@@ -166,8 +170,29 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    AutoCommand auto = new AutoCommand();
-    auto.schedule();
+    //AutoCommand auto = new AutoCommand();
+    //auto.schedule();
+    m_vLeftMotorFront = new WPI_VictorSPX(victorDeviceID);
+    m_vLeftMotorBack = new WPI_VictorSPX(victorDeviceID2);
+
+    m_vRightMotorBack = new WPI_VictorSPX(victorDeviceID3);
+    m_vRightMotorFront = new WPI_VictorSPX(victorDeviceID4);
+
+    m_myRobot = new DifferentialDrive(m_vLeftMotorBack, m_vRightMotorBack);
+    Timer timer = new Timer();
+    timer.reset();
+    timer.start();
+
+    while (timer.get() <= 2500){
+      m_myRobot.tankDrive(0.5, 0.5);
+      setTopVictors(0.5, 0.5);
+    }
+    setTopVictors(0, 0);
+  }
+
+  @Override
+  public void autonomousPeriodic(){
+
   }
 
   @Override

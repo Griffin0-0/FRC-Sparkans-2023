@@ -16,9 +16,11 @@ public class AutoDrive extends CommandBase{
     }
     public void initialize(){
         timer.reset();
+        timer.start();
     }
     public void execute(){
-        drivetrain.drive(0.4, 0);
+        drivetrain.drive(0.75, 0);
+        System.out.println("Calling Drive");
     }
     public boolean isFinished(){
         return timer.get() >= 2500;

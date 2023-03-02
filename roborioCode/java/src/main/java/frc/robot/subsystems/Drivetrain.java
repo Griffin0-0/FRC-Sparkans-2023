@@ -21,7 +21,7 @@ public class Drivetrain extends SubsystemBase {
     private WPI_VictorSPX m_vRightMotorBack;
     private VictorSPXControlMode spxControlMode;
 
-    private DifferentialDrive drive;
+    private DifferentialDrive drivetrain;
     
     public Drivetrain(){
 
@@ -39,12 +39,14 @@ public class Drivetrain extends SubsystemBase {
         m_vRightMotorBack = new WPI_VictorSPX(victorDeviceID3);
         m_vRightMotorFront = new WPI_VictorSPX(victorDeviceID4);
 
-        drive = new DifferentialDrive(m_vLeftMotorBack, m_vRightMotorBack);
+        drivetrain = new DifferentialDrive(m_vLeftMotorBack, m_vRightMotorBack);
+        drivetrain.setSafetyEnabled(false);
     }
 
     public void drive(double speed, double rotationSpeed){
-        drive.arcadeDrive(speed, rotationSpeed);
+        drivetrain.arcadeDrive(speed, rotationSpeed);
         setTopVictors(m_vLeftMotorBack.get(), m_vRightMotorBack.get());
+        System.out.println("Setting Victors");
     }
     public void setTopVictors(double l, double r){
         m_vRightMotorFront.set(spxControlMode, r);

@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
   private static final int victorDeviceID3 = 3;
   private static final int victorDeviceID4 = 4;
 
-  public int armGrabAngle = 110;
+  public int armGrabAngle = 0;
   public int armGrabAngle2 = 0;
 
   private double armPower = 0.0;
@@ -181,9 +181,9 @@ public class Robot extends TimedRobot {
     timer.reset();
     timer.start();
 
-    while (timer.get() <= 3.5){
-      m_myRobot.tankDrive(0.5, -0.70);
-      setTopVictors(0.5, -0.70);
+    while (timer.get() <= 3){
+      m_myRobot.tankDrive(0.65, -0.85);
+      setTopVictors(0.65, -0.85);
     }
     setTopVictors(0, 0);
   }

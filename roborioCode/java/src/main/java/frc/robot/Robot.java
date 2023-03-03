@@ -184,9 +184,9 @@ public class Robot extends TimedRobot {
     timer.reset();
     timer.start();
 
-    while (timer.get() <= 2500){
-      m_myRobot.tankDrive(0.5, 0.5);
-      setTopVictors(0.5, 0.5);
+    while (timer.get() <= 3500){
+      m_myRobot.tankDrive(0.5, -0.70);
+      setTopVictors(0.5, -0.70);
     }
     setTopVictors(0, 0);
   }

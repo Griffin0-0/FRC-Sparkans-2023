@@ -264,7 +264,7 @@ public class Robot extends TimedRobot {
     }
 
 
-    if (m_stick.getRawButton(8) && armGrabAngle <= 120){
+    if (m_stick.getRawButton(8) && armGrabAngle <= 110){
       armGrabAngle++;
       System.out.println("up");
     }

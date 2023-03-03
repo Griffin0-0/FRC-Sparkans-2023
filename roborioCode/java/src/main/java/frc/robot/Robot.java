@@ -141,6 +141,6 @@ public class Robot extends TimedRobot {
     }
 
     servo_1.setAngle((armGrabAngle));
-    servo_2.setAngle((armGrabAngle));
+    servo_2.setAngle((armGrabAngle)+29);
   }
 }

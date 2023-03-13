@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Compressor;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.MjpegServer;
@@ -70,6 +71,8 @@ public class Robot extends TimedRobot {
   private Servo servo_1;
   private Servo servo_2;
 
+  private Compressor phCompressor;
+
   @Override
   public void robotInit() {
 
@@ -113,6 +116,8 @@ public class Robot extends TimedRobot {
 
     // m_arm_bottomSet = new VictorSPX(armDeviceID);
     // m_arm_topSet = new VictorSPX(armDeviceID2);
+
+    phCompressor = new Compressor(1, PneumaticsModuleType.REVPH);
 
     m_armMotor = new CANSparkMax(33, MotorType.kBrushed);
     m_gripperMotor = new CANSparkMax(11, MotorType.kBrushless);
@@ -220,6 +225,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     m_armMotor.restoreFactoryDefaults();
     m_gripperMotor.restoreFactoryDefaults();
+    phCompressor.disable();
   }
 
   @Override
@@ -229,6 +235,11 @@ public class Robot extends TimedRobot {
     //m_arm_bottomSet.set(spxControlMode, m_stick.getRawAxis(0)*0.5);
     //m_arm_topSet.set(spxControlMode, m_stick.getRawAxis(4)*0.5);
     //armTest(armPower);  
+
+    if (m_stick.getRawButton(4)) {
+      phCompressor.enableDigital();
+    }
+
 
     if(! input.get()){
       armMove = false;
